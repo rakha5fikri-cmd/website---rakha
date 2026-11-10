@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- JUDUL TAB BROWSER & DESKRIPSI UNTUK GOOGLE: ganti sesuai profesi Anda -->
+  <title>Rakha — Portofolio</title>
+  <meta name="description" content="Portofolio profesional Reqe: profil, proyek, dan kontak.">
+
+  <!-- FONT: dimuat dari Google Fonts. Jika offline, browser memakai font cadangan. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Newsreader:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ========== 1. WARNA & UKURAN ==========
+       Ubah warna cukup di sini; seluruh halaman ikut berubah. */
+    :root {
+      --paper: #F2F4F1;   /* latar halaman */
+      --ink: #1B2A2F;     /* teks utama */
+      --muted: #5B6B70;   /* teks sekunder */
+      --line: #D3DAD6;    /* garis pemisah */
+      --accent: #0F6B66;  /* warna aksen (tombol, tautan) */
+      --head: "Bricolage Grotesque", "Segoe UI", sans-serif;
+      --body: "Newsreader", Georgia, serif;
+    }
+
+    /* ========== 2. DASAR ========== */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 1.15rem;
+      line-height: 1.65;
+    }
+    a { color: var(--accent); }
+    a:focus-visible, .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+    /* ========== 3. NAVIGASI ========== */
+    /* Menu tetap menempel di atas saat halaman di-scroll */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+    }
+    /* Agar judul bagian tidak tertutup menu saat diklik dari navigasi */
+    html { scroll-padding-top: 80px; }
+    header nav {
+      display: flex; gap: 24px; justify-content: flex-end;
+      padding: 24px 0; font-family: var(--head); font-weight: 500; font-size: .95rem;
+    }
+    header nav a { color: var(--ink); text-decoration: none; }
+    header nav a:hover { color: var(--accent); }
+
+    /* ========== 4. BAGIAN UTAMA (HERO) ========== */
+    .hero { padding: 72px 0 88px; }
+    .hero h1 {
+      font-family: var(--head); font-weight: 800;
+      font-size: clamp(1.8rem, 11vw, 3.7rem);
+      line-height: .9; letter-spacing: -0.04em; margin: 0 0 24px;
+    }
+    .hero .role { font-family: var(--head); font-weight: 500; font-size: 1.4rem; margin: 0 0 16px; }
+    .hero p.intro { max-width: 34em; color: var(--muted); margin: 0 0 32px; }
+    .btn {
+      display: inline-block; background: var(--accent); color: #fff;
+      font-family: var(--head); font-weight: 700; text-decoration: none;
+      padding: 14px 28px; border-radius: 6px;
+    }
+    .btn:hover { background: #0b5753; }
+
+    /* ========== 5. BAGIAN-BAGIAN ISI ========== */
+    section { padding: 56px 0; border-top: 1px solid var(--line); }
+    section h2 { font-family: var(--head); font-weight: 700; font-size: 1.8rem; margin: 0 0 28px; }
+    .row { display: grid; grid-template-columns: 110px 1fr; gap: 8px 24px; padding: 18px 0; }
+    .row + .row { border-top: 1px solid var(--line); }
+    .row .when { font-family: var(--head); font-weight: 500; color: var(--muted); }
+    .row h3 { font-family: var(--head); font-size: 1.2rem; margin: 0 0 4px; }
+    .row p { margin: 0; color: var(--muted); }
+    .skills { display: flex; flex-wrap: wrap; gap: 10px; padding: 0; margin: 0; list-style: none; }
+    .skills li { border: 1px solid var(--line); border-radius: 999px; padding: 4px 16px; font-family: var(--head); font-size: .95rem; }
+
+    footer { padding: 32px 0 56px; color: var(--muted); font-size: .95rem; border-top: 1px solid var(--line); }
+
+    /* ========== 5b. TOMBOL KEMBALI KE ATAS ==========
+       Tersembunyi di awal, muncul setelah halaman di-scroll (diatur JavaScript). */
+    .to-top {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      width: 44px;
+      height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--accent);
+      color: #fff;
+      border: 0;
+      border-radius: 50%;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .2s, visibility .2s;
+    }
+    .to-top.show { opacity: 1; visibility: visible; }
+    .to-top:hover { background: #0b5753; }
+    .to-top:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+    /* ========== 5c. DAFTAR PRESTASI TERLIPAT ========== */
+    .more { margin-top: 12px; border-top: 1px solid var(--line); }
+    .more summary {
+      cursor: pointer; padding: 18px 0;
+      font-family: var(--head); font-weight: 700; color: var(--accent);
+    }
+    .more summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+    .more .row:first-of-type { border-top: 1px solid var(--line); }
+
+    /* ========== 6. TAMPILAN PONSEL ========== */
+    @media (max-width: 600px) {
+      .row { grid-template-columns: 1fr; }
+      header nav { justify-content: flex-start; flex-wrap: wrap; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- MENU ATAS: href="#id" menuju bagian dengan id yang sama di bawah -->
+    <header>
+      <nav aria-label="Navigasi utama">
+        <a href="#tentang">Tentang</a>
+        <a href="#prestasi">Prestasi</a>
+        <a href="#pengalaman">Pengalaman</a>
+        <a href="#kontak">Kontak</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- BAGIAN UTAMA: nama, profesi, ringkasan singkat -->
+      <div class="hero">
+        <h1>Muhammad Rakha Fikri Aulia</h1>
+        <p class="role">Atlet nasional</p>
+        <p class="intro">Atlet nasional Horseback Archery (HBA) yang memiliki kompetensi dalam bidang olahraga berkuda dan memanah. Mengandalkan ketepatan, keseimbangan, disiplin, dan kerja keras tanpa batas.</p>
+        <a class="btn" href="#kontak">Hubungi saya</a>
+      </div>
+
+      <!-- TENTANG -->
+      <section id="tentang">
+        <h2>Tentang saya</h2>
+        <p>Saya Rakha, atlet horseback archery (berkuda memanah) dari Kalimantan Selatan. Sejak 2021 saya aktif berkompetisi di tingkat provinsi dan nasional, di antaranya PORPROV XII Kalimantan Selatan 2025, Kejurnas HBA, dan Eksibisi Berkuda Memanah PON XXI 2024.</p>
+        <p>Dalam olahraga ini, bidikan harus tetap tepat saat kuda bergerak. Karena itu saya melatih keseimbangan, fokus, dan disiplin secara konsisten. Saya terbuka untuk undangan kompetensi, kolabolasi, dan dukungan pembinaan atlet.</p>
+        <ul class="skills" aria-label="Keahlian">
+          <li>Circle Track</li>
+          <li>Raid 233</li>
+          <li>Triple Shoot</li>
+          <li>Panca Abilasa</li>
+        </ul>
+      </section>
+
+      <!-- PRESTASI: salin satu blok class="row" untuk menambah kejuaraan.
+           Prestasi unggulan tampil langsung; sisanya terlipat di dalam "Lihat ... lainnya". -->
+      <section id="prestasi">
+        <h2>Prestasi dan kejuaraan</h2>
+        <div class="row">
+          <div class="when">2025</div>
+          <div>
+            <h3>Juara 1 Triple Shoot Track Canter</h3>
+            <p>PORPROV XII Kalimantan Selatan, Tanah Laut</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">2025</div>
+          <div>
+            <h3>Juara 1 Triple Shoot Track (Mix)</h3>
+            <p>PORPROV XII Kalimantan Selatan, Tanah Laut</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">2025</div>
+          <div>
+            <h3>Juara 1 Masahe</h3>
+            <p>Piala Gubernur Sulawesi Selatan</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">2025</div>
+          <div>
+            <h3>Juara 2 Circle Track 40 D</h3>
+            <p>PORPROV XII Kalimantan Selatan, Tanah Laut</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">2023</div>
+          <div>
+            <h3>Juara 2 Panca Abilasa</h3>
+            <p>HBA FORNAS VII, Bandung</p>
+          </div>
+        </div>
+
+        <details class="more">
+          <summary>Lihat 10 prestasi lainnya</summary>
+        <div class="row">
+          <div class="when">2026</div>
+          <div>
+            <h3>Peringkat 11 Professional Class Putra</h3>
+            <p>HBA Oktavian, Lampung</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">2026</div>
+          <div>
+            <h3>Peringkat 13 Senior Putra Raid 233</h3>
+            <p>Horse Back Archery Competition, Noor Stable, Banten</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">2025</div>
+          <div>
+            <h3>Juara 3 Circular Track</h3>
+            <p>PORPROV XII Kalimantan Selatan, Tanah Laut</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">2025</div>
+          <div>
+            <h3>Peringkat 4 Junior Triple Shoot</h3>
+            <p>Kejurnas HBA, Kelud, Jawa Timur</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">2025</div>
+          <div>
+            <h3>Peringkat 6 Panca Abilasa</h3>
+            <p>FORNAS VIII, NTB</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">2024</div>
+          <div>
+            <h3>Peringkat 6 Circular Track</h3>
+            <p>Eksibisi Berkuda Memanah PON XXI, Aceh–Sumut</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">2023</div>
+          <div>
+            <h3>Peringkat 5 Circle</h3>
+            <p>HBA Sejati Cup, Balikpapan</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">2023</div>
+          <div>
+            <h3>Peringkat 6 Circle Track</h3>
+            <p>Kejurnas PORDASI Berkuda Memanah, Jakarta</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">2022</div>
+          <div>
+            <h3>Juara 3 Triple Shoot Kids</h3>
+            <p>Dandito Cup, Balikpapan</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">2021</div>
+          <div>
+            <h3>Juara 3 Kategori Beginner</h3>
+            <p>National Horse Back Archery Competition, Jakarta</p>
+          </div>
+        </div>
+        </details>
+      </section>
+
+      <!-- PENGALAMAN: urutkan dari yang terbaru -->
+      <section id="pengalaman">
+        <h2>Pengalaman</h2>
+        <div class="row">
+          <div class="when">2023 – kini</div>
+          <div>
+            <h3>[Jabatan], [Nama organisasi]</h3>
+            <p>[Tanggung jawab utama dan pencapaian terukur.]</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">2020 – 2023</div>
+          <div>
+            <h3>[Jabatan], [Nama organisasi]</h3>
+            <p>[Tanggung jawab utama dan pencapaian terukur.]</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- KONTAK: ganti alamat email dan tautan -->
+      <section id="kontak">
+        <h2>Kontak</h2>
+        <p>Terbuka untuk kolaborasi dan peluang profesional. Silakan hubungi saya melalui:</p>
+        <p>
+          <a href="mailto:rakha5fikri@gmail.com">rakha5fikri@gmail.com</a><br>
+          <a href="https://www.instagram.com/a.khhaa/" target="_blank" rel="noopener noreferrer">@a.khhaa</a>
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <!-- Tahun diperbarui otomatis oleh JavaScript di bawah -->
+      &copy; <span id="tahun">2026</span> Reqe. Seluruh hak cipta dilindungi.
+    </footer>
+  </div>
+
+  <!-- TOMBOL KEMBALI KE ATAS -->
+  <button class="to-top" id="toTop" type="button" aria-label="Kembali ke atas">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M6 15l6-6 6 6"/>
+    </svg>
+  </button>
+
+  <script>
+    // Memperbarui tahun di footer secara otomatis
+    document.getElementById("tahun").textContent = new Date().getFullYear();
+
+    // Tombol kembali ke atas: muncul setelah scroll lebih dari 300px
+    const toTop = document.getElementById("toTop");
+    window.addEventListener("scroll", () => {
+      toTop.classList.toggle("show", window.scrollY > 300);
+    });
+    toTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0 });
+    });
+  </script>
+</body>
+</html>
